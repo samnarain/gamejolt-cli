@@ -4,13 +4,29 @@ import (
 	"fmt"
   "os"
   "flag"
+  // "log"
+  // "net/http"
+  // "net/http/httputil"
+  // "net/url"
+  // "bufio"
+  // "errors"
+  // "strings"
+  // "io"
+  // "path/filepath"
+  // "encoding/json"
+  // "mime/multipart"
 )
 
 func main() {
 
   if len(os.Args) > 1 {
     // work in automated state
-    automatedStated()
+    if(os.Args[1] == "push") {
+      pushState()
+    } else {
+      automatedState()
+    }
+
   } else {
     // work in interactive state
     interactiveState()
@@ -42,13 +58,18 @@ func interactiveState() {
   fmt.Printf("GameJolt Interactive\n")
 }
 
-func automatedStated() {
+func pushState() {
+  fmt.Printf("pushing...\n")
+}
+
+func automatedState() {
 
   packageid := flag.String("packageid", "", "the package id")
   release := flag.String("release", "", "the new version")
   buildtarget := flag.String("buildtarget", "", "the build target of the upload")
   gameid := flag.String("gameid", "", "the game id")
   token := flag.String("token", "", "the authentication token")
+  filename := flag.String("filename", "", "the full path to the file to upload")
 
   fmt.Printf("checking...\n")
   flag.Parse()
@@ -83,6 +104,12 @@ func automatedStated() {
 
   if *token == "" {
     fmt.Println("the token is not valid. ")
+    // .. additional checks here
+    ready = false
+  }
+
+  if *filename == "" {
+    fmt.Println("the file does not exist. ")
     // .. additional checks here
     ready = false
   }
