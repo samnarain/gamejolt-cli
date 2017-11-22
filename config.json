@@ -1,0 +1,12 @@
+{
+  "deploys": [
+    {
+      "packageid" : "",
+      "release" : "",
+      "gameid" : "",
+      "token" : "",
+      "buildtarget" : "",
+      "filename" : ""
+    }
+    ]
+}

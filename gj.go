@@ -12,10 +12,24 @@ import (
   // "errors"
   // "strings"
   // "io"
+  "io/ioutil"
   // "path/filepath"
-  // "encoding/json"
+  "encoding/json"
   // "mime/multipart"
 )
+
+type Deploys struct {
+	Deploys []Deploy `json:"deploys"`
+}
+
+type Deploy struct {
+	PackageId string `json:"packageid"`
+	Release string `json:"release"`
+	GameId string `json:"gameid"`
+  Token string `json:"token"`
+	Buildtarget string `json:"buildtarget"`
+  Filename string `json:"filename"`
+}
 
 func main() {
 
@@ -46,12 +60,51 @@ func checkForUpdates() {
 
 }
 
-func checkCommand(command string) {
-    fmt.Printf("checking %s\n", command)
+func checkForPushConfig() {
+  config, err := os.Open("config.json")
+  defer config.Close()
+
+  if(err != nil) {
+    fmt.Println(err.Error())
+    os.Exit(1)
+  } else {
+    byteValue, _ := ioutil.ReadAll(config)
+    var deploys Deploys
+    json.Unmarshal(byteValue, &deploys)
+
+    for i := 0; i < len(deploys.Deploys); i++ {
+
+      if(deploys.Deploys[i].PackageId == "") {
+        fmt.Println("PackageId is empty.")
+        os.Exit(1)
+      }
+      if(deploys.Deploys[i].Release == "") {
+        fmt.Println("Release is empty.")
+        os.Exit(1)
+      }
+      if(deploys.Deploys[i].GameId == "") {
+        fmt.Println("GameId is empty.")
+        os.Exit(1)
+      }
+      if(deploys.Deploys[i].Token == "") {
+        fmt.Println("Token is empty.")
+        os.Exit(1)
+      }
+      if(deploys.Deploys[i].Buildtarget == "") {
+        fmt.Println("Buildtarget is empty.")
+        os.Exit(1)
+      }
+      if(deploys.Deploys[i].Filename == "") {
+        fmt.Println("Filename is empty.")
+        os.Exit(1)
+      }
+
+    }
+  }
 }
 
-func showError(code string) {
-
+func checkCommand(command string) {
+    fmt.Printf("checking %s\n", command)
 }
 
 func interactiveState() {
@@ -60,6 +113,7 @@ func interactiveState() {
 
 func pushState() {
   fmt.Printf("pushing...\n")
+  checkForPushConfig()
 }
 
 func automatedState() {
