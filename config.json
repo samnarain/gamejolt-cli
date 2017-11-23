@@ -1,12 +1,12 @@
 {
   "deploys": [
     {
-      "packageid" : "",
-      "release" : "",
-      "gameid" : "",
-      "token" : "",
-      "buildtarget" : "",
-      "filename" : ""
+      "packageid" : "jkds",
+      "release" : "jkds",
+      "gameid" : "jkds",
+      "token" : "jkds",
+      "buildtarget" : "jkds",
+      "filename" : "jkds"
     }
     ]
 }

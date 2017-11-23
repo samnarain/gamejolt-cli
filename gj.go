@@ -34,10 +34,12 @@ type Deploy struct {
 func main() {
 
   if len(os.Args) > 1 {
-    // work in automated state
+
     if(os.Args[1] == "push") {
+      // work in push state
       pushState()
     } else {
+      // work in automated state
       automatedState()
     }
 
@@ -58,6 +60,10 @@ func checkAuthentication() {
 
 func checkForUpdates() {
 
+}
+
+func deployToGameJolt(packageid, release, gameid, token, buildtarget, filename string) {
+  fmt.Println("Dummy deployed!")
 }
 
 func checkForPushConfig() {
@@ -99,7 +105,10 @@ func checkForPushConfig() {
         os.Exit(1)
       }
 
+      deployToGameJolt(deploys.Deploys[i].PackageId, deploys.Deploys[i].Release, deploys.Deploys[i].GameId, deploys.Deploys[i].Token,
+      deploys.Deploys[i].Buildtarget, deploys.Deploys[i].Filename)
     }
+
   }
 }
 
@@ -120,9 +129,9 @@ func automatedState() {
 
   packageid := flag.String("packageid", "", "the package id")
   release := flag.String("release", "", "the new version")
-  buildtarget := flag.String("buildtarget", "", "the build target of the upload")
   gameid := flag.String("gameid", "", "the game id")
   token := flag.String("token", "", "the authentication token")
+  buildtarget := flag.String("buildtarget", "", "the build target of the upload")
   filename := flag.String("filename", "", "the full path to the file to upload")
 
   fmt.Printf("checking...\n")
@@ -144,12 +153,6 @@ func automatedState() {
     ready = false
   }
 
-  if *buildtarget == "" {
-    fmt.Println("the release version was not supplied. ")
-    // .. additional checks here
-    ready = false
-  }
-
   if *gameid == "" {
     fmt.Println("the game id was not supplied. ")
     // .. additional checks here
@@ -162,6 +165,12 @@ func automatedState() {
     ready = false
   }
 
+  if *buildtarget == "" {
+    fmt.Println("the release version was not supplied. ")
+    // .. additional checks here
+    ready = false
+  }
+
   if *filename == "" {
     fmt.Println("the file does not exist. ")
     // .. additional checks here
@@ -170,7 +179,7 @@ func automatedState() {
 
   if(ready) {
     fmt.Println("Ready to upload!")
-    // start to upload
+    deployToGameJolt(*packageid, *release, *gameid, *token, *buildtarget, *filename)
   }
 
 
