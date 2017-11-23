@@ -8,7 +8,7 @@ import (
   // "net/http"
   // "net/http/httputil"
   // "net/url"
-  // "bufio"
+  "bufio"
   // "errors"
   // "strings"
   // "io"
@@ -66,7 +66,7 @@ func deployToGameJolt(packageid, release, gameid, token, buildtarget, filename s
   fmt.Println("Dummy deployed!")
 }
 
-func checkForPushConfig() {
+func checkAndRunPushConfig() {
   config, err := os.Open("config.json")
   defer config.Close()
 
@@ -117,12 +117,39 @@ func checkCommand(command string) {
 }
 
 func interactiveState() {
-  fmt.Printf("GameJolt Interactive\n")
+
+  var packageid string
+  var release string
+  var gameid string
+  var token string
+  var buildtarget string
+  var filename string
+
+  fmt.Printf("GameJolt CLI - Interactive Mode \n")
+  var ready = false
+
+  gji := bufio.NewScanner(os.Stdin)
+  var command string
+  for command != "q" || ready == true {
+  fmt.Print("> ")
+  gji.Scan()
+
+  command = gji.Text()
+    if command != "q" {
+      // parse the input here.
+    }
+
+  }
+
+  if(ready) {
+    deployToGameJolt(packageid, release, gameid, token, buildtarget, filename)
+  }
+
 }
 
 func pushState() {
   fmt.Printf("pushing...\n")
-  checkForPushConfig()
+  checkAndRunPushConfig()
 }
 
 func automatedState() {
